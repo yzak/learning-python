@@ -1,0 +1,22 @@
+version: '3'
+services:
+  postgres:
+    container_name: postgres
+    image: postgres:15.3
+    restart: always
+    ports: 
+      - "5432:5432"
+    volumes:
+      - ./postgres/db:/var/lib/postgresql/pgdata
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+  app:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
